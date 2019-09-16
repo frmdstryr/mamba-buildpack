@@ -25,11 +25,14 @@ An example `environment.yml` shows how to define conda and pip packages with cus
 name: myapp
 runtime: Miniconda3-4.7.10
 channels:
+  - anaconda
   - conda-forge
-  # etc...
+
 dependencies:
-  - python=3.7.4
+  - python=3.7
+  - pip
   # etc...
+
   - pip:
     - numpy==1.17.0
     # etc..
