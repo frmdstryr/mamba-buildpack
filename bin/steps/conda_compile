@@ -38,7 +38,7 @@ conda install $MINICONDA_VERBOSITY nomkl --yes | indent
 # Update the root conda env with the environment.yml instead of creating
 # a new env
 puts-step "Updating conda environment"
-conda env update $MINICONDA_VERBOSITY --name root --file environment.yml --yes | indent
+conda env update $MINICONDA_VERBOSITY --name root --file environment.yml | indent
 
 if [ -f requirements.txt ]; then
     puts-step "Installing dependencies using Pip"
