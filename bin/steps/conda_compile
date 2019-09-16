@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set +e
 
-MINICONDA_VERSION=$(cat conda-runtime.txt | tr -d "\n")
+MINICONDA_VERSION=$(cat environment.yml | grep 'runtime:'| tr -d "\n")
 IFS='-' read -r -a VERSION_ARRAY <<< ${MINICONDA_VERSION}
 VERSION=${VERSION_ARRAY[1]}
 
@@ -35,10 +35,11 @@ fi
 echo "added pinned file in $HOME/.heroku/miniconda/conda-meta/pinned"
 conda install $MINICONDA_VERBOSITY nomkl --yes | indent
 
+# Update the root conda env with the environment.yml instead of creating
+# a new env
+puts-step "Updating conda environment"
+conda env update $MINICONDA_VERBOSITY --name root --file environment.yml --yes | indent
 
-puts-step "Installing dependencies using Conda"
-conda install $MINICONDA_VERBOSITY --file conda-requirements.txt --yes | indent
-frmdstryr/conda-buildpack
 if [ -f requirements.txt ]; then
     puts-step "Installing dependencies using Pip"
     pip install -r requirements.txt  --exists-action=w | indent

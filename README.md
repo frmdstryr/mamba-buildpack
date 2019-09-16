@@ -6,23 +6,34 @@ This buildpack enables the installation of binary packages through the open sour
 
 ### Usage and files needed
 
-#### conda runtime
-
-A `conda-runtime.txt` file is needed, it should contain the version of `conda` to install, in the form of `Miniconda<2-or-3>-<conda-version>`, e.g. `Miniconda3-4.5.12`
+An `environment.yml` file is needed. This is a standard conda env file but it should also contain
+the version of `conda` to install, as the `runtime` in the form of `Miniconda<2-or-3>-<conda-version>`, e.g. `Miniconda3-4.7.10`
 
 The supported runtimes are the ones in [this list](https://repo.continuum.io/miniconda/) and `>= 3.18.3`
 
-If this buildpack is used for a deployment to [Plotly's Dash Deployment Server](https://plot.ly/dash/pricing/) in `airgapped` (offline) mode, the only conda runtimes currently supported are `Miniconda3-4.5.12` and `Miniconda2-4.5.12`
 
-#### conda requirements
+If a `requirements.txt` file is found it will also run `pip install -r requirements.txt`
 
-To control what binary packages are installed by conda, supply a `conda-requirements.txt` file (which can be created by capturing the output of `conda list -e` for your working conda environment).
 
-#### pip requirements
+### Example
 
-Like when using the standard `buildpack` for python from Heroku, you can also still supply a `requirements.txt` file for [pip](https://github.com/pypa/pip) to process. This allows you to install binary packages via `conda` when possible and still use pip for packages that are not available via `conda`.
 
-#### .condarc configuration file
+An example `environment.yml` shows how to define conda and pip packages with custom channels and the runtime.
 
-A [`.condarc` configuration file](https://docs.conda.io/projects/conda/en/latest/user-guide/configuration/use-condarc.html) can be added to the root of the app, this file will be detected and used to build and run the conda app. This can be useful for a number of things as described in the official conda documentation linked to earlier in this paragraph, including [using a proxy](https://docs.conda.io/projects/conda/en/latest/user-guide/configuration/use-condarc.html#configure-conda-for-use-behind-a-proxy-server-proxy-servers) for conda installs and [using conda channels other than the default one](https://docs.conda.io/projects/conda/en/latest/user-guide/configuration/use-condarc.html#channel-locations-channels).
+```yaml
+
+name: myapp
+runtime: Miniconda3-4.7.10
+channels:
+  - conda-forge
+  # etc...
+dependencies:
+  - python=3.7.4
+  # etc...
+  - pip:
+    - numpy==1.17.0
+    # etc..
+
+```
+
 
