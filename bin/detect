@@ -15,8 +15,8 @@
 BUILD_DIR=$1
 
 # Exit early if app is clearly not Python.
-if [ -f $BUILD_DIR/environment.yml ]; then
-  echo Conda environment
+if [ -f $BUILD_DIR/mamba.yml ]; then
+  echo Mamba environment
 else
   exit 1
 fi

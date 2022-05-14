@@ -1,35 +1,32 @@
-## Conda Buildpack
+## Mamba Buildpack
 
-This is a Buildpack for [Conda](http://conda.pydata.org/), the Python distribution for scientific computing by Continuum Analytics.
-
-This buildpack enables the installation of binary packages through the open source [conda](http://conda.pydata.org/) application.  Conda is recognized as being core to Continuum's Anaconda Scientific Python distro but it's also at the heart of the lighter weight [Miniconda](http://conda.pydata.org/miniconda.html) distro which we use here to install _only_ the binary packages we need for our apps deployed on [PaaS](https://en.wikipedia.org/wiki/Platform_as_a_service) platforms like [Heroku](https://www.heroku.com/) and [Dash Deployment Server](https://plot.ly/dash/pricing/).
+Buildpack for Conda that uses [mamba](https://github.com/mamba-org/mamba).
 
 ### Usage and files needed
 
-An `environment.yml` file is needed. This is a standard conda env file but it should also contain
-the version of `conda` to install, as the `runtime` in the form of `Miniconda<2-or-3>-<conda-version>`, e.g. `Miniconda3-4.7.10`
+An `mamba.yml` file is needed. This is a standard conda env file but it should
+also contain the url to the buiild of of `micromamba` to install,
+as the `runtime`. See the example below.
 
-The supported runtimes are the ones in [this list](https://repo.continuum.io/miniconda/) and `>= 3.18.3`
-
+The supported runtimes are the ones in [this list](https://anaconda.org/conda-forge/micromamba/)
 
 If a `requirements.txt` file is found it will also run `pip install -r requirements.txt`
 
 
 ### Example
 
-
-An example `environment.yml` shows how to define conda and pip packages with custom channels and the runtime.
+An example `mamba.yml` shows how to define conda and pip packages with custom channels and the runtime.
 
 ```yaml
 
 name: myapp
-runtime: Miniconda3-4.7.10
+runtime: https://anaconda.org/conda-forge/micromamba/0.23.1/download/linux-64/micromamba-0.23.1-0.tar.bz2
 channels:
   - anaconda
   - conda-forge
 
 dependencies:
-  - python=3.7
+  - python=3.10
   - pip
   # etc...
 

@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+set +e
+
+MICROMAMBA_VERSION=$(cat mamba.yml | grep 'runtime:'| tr -d "\n")
+IFS='-' read -r -a VERSION_ARRAY <<< ${MICROMAMBA_VERSION}
+VERSION=${VERSION_ARRAY[1]}
+
+MICROMAMBA_VERBOSITY=-v
+
+
+if [ ! -d /app/.heroku/micromamba ]; then
+    puts-step "Preparing Python/Conda Environment"
+    if ! curl -Ofv $MICROMAMBA_VERSION ; then
+        exit 1
+    fi
+
+    tar -xvj bin/micromamba -C /app/.heroku/micromamba/ | indent
+    rm -rf micromamba-*.tar.bz2
+
+    if [ -f .condarc ]; then
+        puts-step "Copying condarc file to micromamba directory"
+        cp .condarc /app/.heroku/micromamba
+    fi
+
+    micromamba config --set auto_update_conda False
+    micromamba install $MICROMAMBA_VERBOSITY pip --yes | indent
+fi
+
+echo "nomkl" > $HOME/.heroku/micromamba/conda-meta/pinned
+# Pin the conda version if proper version, not `latest` or anything else
+if [[ $VERSION =~ ^[0-9]+(\.[0-9]+)*$ ]]; then
+	echo "micromamba ==${VERSION}" >> $HOME/.heroku/micromamba/conda-meta/pinned
+fi
+echo "added pinned file in $HOME/.heroku/micromamba/conda-meta/pinned"
+
+# Update the root conda env with the mamba.yml instead of creating
+# a new env
+puts-step "Updating mamba environment"
+micromamba env update $MICROMAMBA_VERBOSITY --name root --file mamba.yml | indent
+
+if [ -f requirements.txt ]; then
+    puts-step "Installing dependencies using Pip"
+    pip install -r requirements.txt  --exists-action=w | indent
+fi
+
+# Clean up the installation environment .
+conda clean -pt --yes > /dev/null
