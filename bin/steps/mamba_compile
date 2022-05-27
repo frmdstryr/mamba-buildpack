@@ -2,20 +2,31 @@
 set +e
 
 MICROMAMBA_VERSION=$(cat mamba.yml | grep 'runtime:'| tr -d "\n")
-IFS='-' read -r -a VERSION_ARRAY <<< ${MICROMAMBA_VERSION}
+
+IFS=' ' read -r -a RUNTIME_ARRAY <<< ${MICROMAMBA_VERSION}
+# https://anaconda.org/conda-forge/micromamba/0.23.1/download/linux-64/micromamba-0.23.1-0.tar.bz2
+MICROMAMBA_URL=${RUNTIME_ARRAY[-1]}
+
+
+IFS='/' read -r -a URL_PARTS <<< ${MICROMAMBA_URL}
+# micromamba-0.23.1-0.tar.bz2
+MICROMAMBA_FILENAME=${URL_PARTS[-1]}
+
+IFS='-' read -r -a VERSION_ARRAY <<< ${MICROMAMBA_FILENAME}
+# 0.23.1
 VERSION=${VERSION_ARRAY[1]}
 
 MICROMAMBA_VERBOSITY=-v
 
 
 if [ ! -d /app/.heroku/micromamba ]; then
-    puts-step "Preparing Python/Conda Environment"
-    if ! curl -Ofv $MICROMAMBA_VERSION ; then
+    puts-step "Fetching Mamba from: ${MICROMAMBA_URL}"
+    if ! curl -Ofv $MICROMAMBA_URL ; then
         exit 1
     fi
 
     tar -xvj bin/micromamba -C /app/.heroku/micromamba/ | indent
-    rm -rf micromamba-*.tar.bz2
+    rm -rf $MICROMAMBA_FILENAME
 
     if [ -f .condarc ]; then
         puts-step "Copying condarc file to micromamba directory"
