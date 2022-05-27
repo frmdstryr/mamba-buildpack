@@ -25,8 +25,12 @@ if [ ! -d /app/.heroku/micromamba ]; then
         exit 1
     fi
 
+    ls ./
+    puts-step "Extractin: ${MICROMAMBA_FILENAME}"
     tar -xvj $MICROMAMBA_FILENAME -C /app/.heroku/micromamba/ | indent
     rm $MICROMAMBA_FILENAME
+
+    ls /app/.heroku/micromamba/
 
     if [ -f .condarc ]; then
         puts-step "Copying condarc file to micromamba directory"
