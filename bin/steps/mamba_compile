@@ -25,7 +25,7 @@ if [ ! -d /app/.heroku/micromamba ]; then
         exit 1
     fi
 
-    tar -xvjf $MICROMAMBA_FILENAME -C /app/.heroku/micromamba/ | indent
+    tar -xvj $MICROMAMBA_FILENAME -C /app/.heroku/micromamba/ | indent
     rm $MICROMAMBA_FILENAME
 
     if [ -f .condarc ]; then
@@ -37,7 +37,7 @@ if [ ! -d /app/.heroku/micromamba ]; then
     micromamba install $MICROMAMBA_VERBOSITY pip --yes | indent
 fi
 
-mkdir -p $HOME/.heroku/micromamba/mamba-meta/pinned
+mkdir -p $HOME/.heroku/micromamba/mamba-meta/
 echo "nomkl" > $HOME/.heroku/micromamba/mamba-meta/pinned
 # Pin the conda version if proper version, not `latest` or anything else
 if [[ $VERSION =~ ^[0-9]+(\.[0-9]+)*$ ]]; then
