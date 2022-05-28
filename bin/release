@@ -4,5 +4,7 @@
 cat <<EOF
 ---
 config_vars:
+  MAMBA_EXE: /app/.heroku/micromamba/bin/micromamba
+  MAMBA_ROOT_PREFIX: /app/.heroku/micromamba
   PATH: /app/.heroku/anaconda/bin:/usr/local/bin:/usr/bin:/bin
 EOF
