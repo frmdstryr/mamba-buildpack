@@ -16,6 +16,9 @@ IFS='-' read -r -a VERSION_ARRAY <<< ${MICROMAMBA_FILENAME}
 # 0.23.1
 VERSION=${VERSION_ARRAY[1]}
 
+export MAMBA_EXE=/app/.heroku/micromamba/bin/micromamba
+export MAMBA_ROOT_PREFIX=/app/.heroku/micromamba
+
 if [ ! -d /app/.heroku/micromamba ]; then
     puts-step "Fetching Mamba from: ${MICROMAMBA_URL}"
     if ! wget $MICROMAMBA_URL ; then
@@ -47,11 +50,15 @@ fi
 echo "added pinned file in $HOME/.heroku/micromamba/mamba-meta/pinned"
 
 # Update the root conda env with the mamba.yml
-puts-step "Updating mamba environment"
-export MAMBA_EXE=/app/.heroku/micromamba/bin/micromamba
-export MAMBA_ROOT_PREFIX=/app/.heroku/micromamba
+puts-step "Activate mamba environment"
 eval "$(micromamba shell hook --shell=bash)"
 micromamba activate
+
+if [ ! -d /app/.heroku/micromamba/envs/root/ ]; then
+    micromamba create -n root
+fi
+
+puts-step "Updating mamba environment"
 micromamba info
 micromamba update --name root --file mamba.yml --yes | indent
 
