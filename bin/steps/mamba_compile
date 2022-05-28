@@ -60,7 +60,7 @@ fi
 
 puts-step "Updating mamba environment"
 micromamba info
-micromamba update --name root --file mamba.yml --yes | indent
+mamba env update --name root --file mamba.yml --yes | indent
 
 if [ -f requirements.txt ]; then
     puts-step "Installing dependencies using Pip"
@@ -69,3 +69,6 @@ fi
 
 # Clean up the installation environment .
 micromamba clean -pt --yes > /dev/null
+
+puts-step "Listing environment"
+mamba list
