@@ -26,9 +26,10 @@ if [ ! -d /app/.heroku/micromamba ]; then
     fi
 
     ls ./
-    puts-step "Extracting: ${MICROMAMBA_FILENAME}"
+    puts-step "Extracting: '${MICROMAMBA_FILENAME}'"
     mkdir -p /app/.heroku/micromamba/
-    tar -xvj $MICROMAMBA_FILENAME -C /app/.heroku/micromamba/ | indent
+    file $MICROMAMBA_FILENAME
+    tar -xvjf $MICROMAMBA_FILENAME -C /app/.heroku/micromamba/
     rm $MICROMAMBA_FILENAME
 
     ls /app/.heroku/micromamba/
