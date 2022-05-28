@@ -53,7 +53,7 @@ echo "added pinned file in $HOME/.heroku/micromamba/mamba-meta/pinned"
 puts-step "Activate mamba environment"
 eval "$(micromamba shell hook --shell=bash)"
 micromamba activate
-micromamba install mamba --yes | indent
+micromamba install mamba --yes -c conda-forge | indent
 
 puts-step "Updating mamba environment"
 micromamba info
