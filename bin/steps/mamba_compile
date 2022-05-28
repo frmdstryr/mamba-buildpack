@@ -16,9 +16,6 @@ IFS='-' read -r -a VERSION_ARRAY <<< ${MICROMAMBA_FILENAME}
 # 0.23.1
 VERSION=${VERSION_ARRAY[1]}
 
-MICROMAMBA_VERBOSITY=-v
-
-
 if [ ! -d /app/.heroku/micromamba ]; then
     puts-step "Fetching Mamba from: ${MICROMAMBA_URL}"
     if ! wget $MICROMAMBA_URL ; then
@@ -34,12 +31,11 @@ if [ ! -d /app/.heroku/micromamba ]; then
 
     ls /app/.heroku/micromamba/
 
-    if [ -f .condarc ]; then
-        puts-step "Copying condarc file to micromamba directory"
-        cp .condarc /app/.heroku/micromamba
+    if [ -f .mambarc ]; then
+        puts-step "Copying mambarc file to micromamba directory"
+        cp .mambarc /app/.heroku/micromamba
     fi
 
-    micromamba config --set auto_update_conda False
     micromamba install $MICROMAMBA_VERBOSITY pip --yes | indent
 fi
 
@@ -54,7 +50,7 @@ echo "added pinned file in $HOME/.heroku/micromamba/mamba-meta/pinned"
 # Update the root conda env with the mamba.yml instead of creating
 # a new env
 puts-step "Updating mamba environment"
-micromamba env update $MICROMAMBA_VERBOSITY --name root --file mamba.yml | indent
+micromamba update --name root --file mamba.yml --yes | indent
 
 if [ -f requirements.txt ]; then
     puts-step "Installing dependencies using Pip"
@@ -62,4 +58,4 @@ if [ -f requirements.txt ]; then
 fi
 
 # Clean up the installation environment .
-conda clean -pt --yes > /dev/null
+micromamba clean -pt --yes > /dev/null
