@@ -35,9 +35,8 @@ if [ ! -d /app/.heroku/micromamba ]; then
         puts-step "Copying mambarc file to micromamba directory"
         cp .mambarc /app/.heroku/micromamba
     fi
-
-    micromamba install $MICROMAMBA_VERBOSITY pip --yes | indent
 fi
+
 
 mkdir -p $HOME/.heroku/micromamba/mamba-meta/
 echo "nomkl" > $HOME/.heroku/micromamba/mamba-meta/pinned
@@ -50,6 +49,8 @@ echo "added pinned file in $HOME/.heroku/micromamba/mamba-meta/pinned"
 # Update the root conda env with the mamba.yml instead of creating
 # a new env
 puts-step "Updating mamba environment"
+micromamba activate
+micromamba info
 micromamba update --name root --file mamba.yml --yes | indent
 
 if [ -f requirements.txt ]; then

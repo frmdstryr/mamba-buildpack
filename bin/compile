@@ -89,8 +89,6 @@ done
 
 # Set context environment variables.
 set-env PATH '$HOME/.heroku/micromamba/bin:$PATH'
-set-env MAMBA_EXE '$HOME/.heroku/micromamba/bin/micromamba'
-set-env MAMBA_ROOT_PREFIX '$HOME/.heroku/micromamba'
 set-env PYTHONUNBUFFERED true
 set-default-env LANG en_US.UTF-8
 set-default-env PYTHONHASHSEED random
