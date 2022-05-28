@@ -48,7 +48,7 @@ echo "added pinned file in $HOME/.heroku/micromamba/mamba-meta/pinned"
 
 # Update the root conda env with the mamba.yml
 puts-step "Updating mamba environment"
-eval "$(micromamba shell hook --shell=bash)"
+eval "$(micromamba shell hook --shell=bash --prefix=/app/.heroku/micromamba)"
 micromamba activate
 micromamba info
 micromamba update --name root --file mamba.yml --yes | indent
