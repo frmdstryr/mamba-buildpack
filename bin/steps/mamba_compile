@@ -55,7 +55,7 @@ eval "$(micromamba shell hook --shell=bash)"
 micromamba activate
 
 if [ ! -d /app/.heroku/micromamba/envs/root/ ]; then
-    micromamba create -n root
+    micromamba create -n root --yes mamba
 fi
 
 puts-step "Updating mamba environment"
