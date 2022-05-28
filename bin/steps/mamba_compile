@@ -21,7 +21,7 @@ MICROMAMBA_VERBOSITY=-v
 
 if [ ! -d /app/.heroku/micromamba ]; then
     puts-step "Fetching Mamba from: ${MICROMAMBA_URL}"
-    if ! curl -OfiLv $MICROMAMBA_URL ; then
+    if ! wget $MICROMAMBA_URL ; then
         exit 1
     fi
 
