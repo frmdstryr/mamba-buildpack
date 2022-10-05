@@ -5,7 +5,7 @@ Buildpack for Conda that uses [mamba](https://github.com/mamba-org/mamba).
 ### Usage and files needed
 
 An `mamba.yml` file is needed. This is a standard conda env file but it should
-also contain the url to the buiild of of `micromamba` to install,
+also contain the url to the build of of `micromamba` to install,
 as the `runtime`. See the example below.
 
 The supported runtimes are the ones in [this list](https://anaconda.org/conda-forge/micromamba/)
@@ -20,7 +20,7 @@ An example `mamba.yml` shows how to define conda and pip packages with custom ch
 ```yaml
 
 name: myapp
-runtime: https://anaconda.org/conda-forge/micromamba/0.23.1/download/linux-64/micromamba-0.23.1-0.tar.bz2
+runtime: https://anaconda.org/conda-forge/micromamba/0.27.0/download/linux-64/micromamba-0.27.0-0.tar.bz2
 channels:
   - anaconda
   - conda-forge
