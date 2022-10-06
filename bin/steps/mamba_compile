@@ -53,11 +53,9 @@ echo "added pinned file in $HOME/.heroku/micromamba/mamba-meta/pinned"
 puts-step "Activate mamba environment"
 eval "$(micromamba shell hook --shell=bash)"
 micromamba activate
-micromamba install mamba --yes -c conda-forge | indent
 
 puts-step "Updating mamba environment"
-micromamba info
-mamba env update --name root --file mamba.yml --prune | indent
+micromamba update --name root --file mamba.yml --prune | indent
 
 if [ -f requirements.txt ]; then
     puts-step "Installing dependencies using Pip"
@@ -68,4 +66,4 @@ fi
 micromamba clean -pt --yes > /dev/null
 
 puts-step "Listing environment"
-mamba list
+micromamba list
