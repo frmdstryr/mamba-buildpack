@@ -67,3 +67,5 @@ micromamba clean -pt --yes > /dev/null
 
 puts-step "Listing environment"
 micromamba list
+if command -v pip &> /dev/null; then pip list; fi
+
