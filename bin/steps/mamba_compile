@@ -55,7 +55,7 @@ eval "$(micromamba shell hook --shell=bash)"
 micromamba activate
 
 puts-step "Updating mamba environment"
-micromamba update --name root --file mamba.yml --prune | indent
+micromamba update --name base --file mamba.yml --prune | indent
 
 if [ -f requirements.txt ]; then
     puts-step "Installing dependencies using Pip"
