@@ -38,24 +38,28 @@ if [ ! -d /app/.heroku/micromamba ]; then
         puts-step "Copying mambarc file to micromamba directory"
         cp .mambarc /app/.heroku/micromamba
     fi
-fi
 
-
-mkdir -p $HOME/.heroku/micromamba/mamba-meta/
-echo "nomkl" > $HOME/.heroku/micromamba/mamba-meta/pinned
-# Pin the conda version if proper version, not `latest` or anything else
-if [[ $VERSION =~ ^[0-9]+(\.[0-9]+)*$ ]]; then
-	echo "micromamba ==${VERSION}" >> $HOME/.heroku/micromamba/mamba-meta/pinned
+    mkdir -p $HOME/.heroku/micromamba/mamba-meta/
+    echo "nomkl" > $HOME/.heroku/micromamba/mamba-meta/pinned
+    # Pin the conda version if proper version, not `latest` or anything else
+    if [[ $VERSION =~ ^[0-9]+(\.[0-9]+)*$ ]]; then
+        echo "micromamba ==${VERSION}" >> $HOME/.heroku/micromamba/mamba-meta/pinned
+    fi
+    echo "added pinned file in $HOME/.heroku/micromamba/mamba-meta/pinned"
 fi
-echo "added pinned file in $HOME/.heroku/micromamba/mamba-meta/pinned"
 
 # Update the root conda env with the mamba.yml
 puts-step "Activate mamba environment"
 eval "$(micromamba shell hook --shell=bash)"
 micromamba activate
 
-puts-step "Updating mamba environment"
-micromamba update --name base --file mamba.yml --prune | indent
+if [ ! -d /app/.heroku/micromamba/lib ]; then
+    puts-step "Creating mamba environment"
+    micromamba create --name base --file mamba.yml --prune | indent
+else
+    puts-step "Updating mamba environment"
+    micromamba update --name base --file mamba.yml --prune | indent
+fi
 
 if [ -f requirements.txt ]; then
     puts-step "Installing dependencies using Pip"
