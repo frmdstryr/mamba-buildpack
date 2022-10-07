@@ -34,6 +34,10 @@ if [ ! -d /app/.heroku/micromamba ]; then
 
     ls /app/.heroku/micromamba/
 
+    # Create empty base env initial update fails
+    mkdir -p /app/.heroku/micromamba/conda-meta/
+    touch /app/.heroku/micromamba/conda-meta/history
+
     if [ -f .mambarc ]; then
         puts-step "Copying mambarc file to micromamba directory"
         cp .mambarc /app/.heroku/micromamba
