@@ -52,14 +52,10 @@ fi
 puts-step "Activate mamba environment"
 eval "$(micromamba shell hook --shell=bash)"
 micromamba activate
+micromamba info
 
-if [ ! -d /app/.heroku/micromamba/lib ]; then
-    puts-step "Creating mamba environment"
-    micromamba create --name base --file mamba.yml | indent
-else
-    puts-step "Updating mamba environment"
-    micromamba update --name base --file mamba.yml --prune | indent
-fi
+puts-step "Updating mamba environment"
+micromamba update --name base --file mamba.yml --prune | indent
 
 if [ -f requirements.txt ]; then
     puts-step "Installing dependencies using Pip"
