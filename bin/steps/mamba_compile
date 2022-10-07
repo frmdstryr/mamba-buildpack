@@ -55,7 +55,7 @@ micromamba activate
 
 if [ ! -d /app/.heroku/micromamba/lib ]; then
     puts-step "Creating mamba environment"
-    micromamba create --name base --file mamba.yml --prune | indent
+    micromamba create --name base --file mamba.yml | indent
 else
     puts-step "Updating mamba environment"
     micromamba update --name base --file mamba.yml --prune | indent
