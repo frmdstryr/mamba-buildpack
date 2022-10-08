@@ -55,6 +55,7 @@ micromamba activate
 
 if [ ! -d /app/.heroku/micromamba/conda-meta/ ]; then
     # Install mamba on first run
+    puts-step "Installing mamba"
     micromamba install mamba --yes -c conda-forge | indent
 fi
 
