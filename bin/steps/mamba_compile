@@ -34,10 +34,6 @@ if [ ! -d /app/.heroku/micromamba ]; then
 
     ls /app/.heroku/micromamba/
 
-    # Create empty base env initial update fails
-    mkdir -p /app/.heroku/micromamba/conda-meta/
-    touch /app/.heroku/micromamba/conda-meta/history
-
     if [ -f .mambarc ]; then
         puts-step "Copying mambarc file to micromamba directory"
         cp .mambarc /app/.heroku/micromamba
@@ -56,10 +52,14 @@ fi
 puts-step "Activate mamba environment"
 eval "$(micromamba shell hook --shell=bash)"
 micromamba activate
-micromamba info
+
+if [ ! -d /app/.heroku/micromamba/conda-meta/ ]; then
+    # Install mamba on first run
+    micromamba install mamba --yes -c conda-forge | indent
+fi
 
 puts-step "Updating mamba environment"
-micromamba update --name base --file mamba.yml --prune | indent
+mamba env update --name base --file mamba.yml --prune | indent
 
 if [ -f requirements.txt ]; then
     puts-step "Installing dependencies using Pip"
@@ -70,6 +70,5 @@ fi
 micromamba clean -pt --yes > /dev/null
 
 puts-step "Listing environment"
-micromamba list
-if command -v pip &> /dev/null; then pip list; fi
+mamba list
 
